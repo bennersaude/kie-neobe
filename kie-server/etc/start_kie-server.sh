@@ -45,5 +45,5 @@ chmod +x ./update_db_config.sh
 
 # Start Wildfly with the given arguments.
 echo "Running KIE Execution Server on JBoss Wildfly..."
-exec ./standalone.sh $JBOSS_ARGUMENTS -c standalone.xml
+exec ./standalone.sh $JBOSS_ARGUMENTS -Dorg.kie.mail.session=java:jboss/mail/Default -c standalone.xml
 exit $?

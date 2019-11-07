@@ -1,9 +1,9 @@
 #################################################################################
-# Dockerfile that provides the image for JBoss KIE Server 7.14.0.Final Showcase
+# Dockerfile that provides the image for JBoss KIE Server 7.17.0.Final Showcase
 #################################################################################
 
 ####### BASE ############
-FROM jboss/kie-server:7.14.0.Final
+FROM jboss/kie-server:7.23.0.Final
 
 ####### MAINTAINER ############
 MAINTAINER "Leandro Alberto Lonardoni" "leandro.lonardoni@benner.com.br"
@@ -27,6 +27,7 @@ RUN mkdir -p $HOME/.m2
 ADD etc/standalone.xml $JBOSS_HOME/standalone/configuration/standalone.xml
 ADD etc/kie-server-users.properties $JBOSS_HOME/standalone/configuration/kie-server-users.properties
 ADD etc/kie-server-roles.properties $JBOSS_HOME/standalone/configuration/kie-server-roles.properties
+ADD etc/domain/host.xml $JBOSS_HOME/domain/configuration/host.xml
 ADD etc/start_kie-server.sh $JBOSS_HOME/bin/start_kie-server.sh
 ADD etc/update_db_config.sh $JBOSS_HOME/bin/update_db_config.sh
 ADD etc/jbpm-postgres-config.cli $JBOSS_HOME/bin/jbpm-postgres-config.cli
@@ -40,9 +41,13 @@ USER root
 RUN chown jboss:jboss $JBOSS_HOME/standalone/configuration/standalone.xml && \
 chown jboss:jboss $JBOSS_HOME/standalone/configuration/kie-server-users.properties && \
 chown jboss:jboss $JBOSS_HOME/standalone/configuration/kie-server-roles.properties && \
+chown jboss:jboss $JBOSS_HOME/domain/configuration/host.xml && \
 chown jboss:jboss $JBOSS_HOME/bin/update_db_config.sh && \
 chown jboss:jboss $JBOSS_HOME/bin/start_kie-server.sh && \
 chown jboss:jboss $JBOSS_HOME/../.m2/settings.xml
+RUN chmod +x $JBOSS_HOME/bin/start_kie-server.sh
+RUN chmod +x $JBOSS_HOME/bin/add-user.sh
+RUN $JBOSS_HOME/bin/add-user.sh admin admin --silent
 
 ####### JBOSS USER ############
 # Switchback to jboss user

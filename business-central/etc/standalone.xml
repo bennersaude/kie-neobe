@@ -37,14 +37,6 @@
         <extension module="org.wildfly.extension.undertow"/>
 		<extension module="org.keycloak.keycloak-adapter-subsystem"/>
     </extensions>
-    <system-properties>
-        <property name="org.kie.server.id" value="${org.kie.demo:true}"/>
-        <property name="org.kie.example" value="${org.kie.example:true}"/>
-        <property name="org.jbpm.designer.perspective" value="${org.jbpm.designer.perspective:full}"/>
-        <property name="designerdataobjects" value="${designerdataobjects:false}"/>
-        <property name="org.uberfire.nio.git.ssh.host" value="0.0.0.0"/>
-        <property name="appformer.experimental.features" value="true"/>
-    </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
@@ -420,20 +412,7 @@
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-		<subsystem xmlns="urn:jboss:domain:keycloak:1.1">
-			<realm name="REALM_NAME">
-				<auth-server-url>AUTH_SERVER_URL</auth-server-url>
-				<ssl-required>none</ssl-required>
-				<realm-public-key>REALM_PUBLIC_KEY</realm-public-key>
-			</realm>
-		  <secure-deployment name="business-central.war">
-			<realm>REALM_NAME</realm>
-			<resource>business-central</resource>
-			<enable-basic-auth>true</enable-basic-auth>
-			<credential name="secret">SECRET_CREDENCIAL</credential>
-			<principal-attribute>preferred_username</principal-attribute>
-		  </secure-deployment>	  
-		</subsystem>			
+		<subsystem xmlns="urn:jboss:domain:keycloak:1.1"/>
         <subsystem xmlns="urn:jboss:domain:security:2.0">
             <security-domains>
                 <security-domain name="other" cache-type="default">
@@ -469,7 +448,7 @@
                     <authentication>
                         <login-module code="org.keycloak.adapters.jboss.KeycloakLoginModule" flag="required"/>
                     </authentication>
-                </security-domain>					
+                </security-domain>				
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
@@ -507,7 +486,7 @@
             </handlers>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0">
-            <wsdl-host>${jboss.bind.address:127.0.0.1}</wsdl-host>
+            <wsdl-host>${jboss.bind.address:0.0.0.0}</wsdl-host>
             <endpoint-config name="Standard-Endpoint-Config"/>
             <endpoint-config name="Recording-Endpoint-Config">
                 <pre-handler-chain name="recording-handlers" protocol-bindings="##SOAP11_HTTP ##SOAP11_HTTP_MTOM ##SOAP12_HTTP ##SOAP12_HTTP_MTOM">
@@ -520,10 +499,10 @@
     </profile>
     <interfaces>
         <interface name="management">
-            <inet-address value="${jboss.bind.address.management:127.0.0.1}"/>
+            <inet-address value="${jboss.bind.address.management:0.0.0.0}"/>
         </interface>
         <interface name="public">
-            <inet-address value="${jboss.bind.address:127.0.0.1}"/>
+            <inet-address value="${jboss.bind.address:0.0.0.0}"/>
         </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public" port-offset="${jboss.socket.binding.port-offset:0}">
@@ -538,3 +517,4 @@
             <remote-destination host="localhost" port="25"/>
         </outbound-socket-binding>
     </socket-binding-group>
+</server>
